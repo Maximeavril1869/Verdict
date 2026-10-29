@@ -166,16 +166,22 @@ const affaire = {
   ],
 
   lieux: [
-    { id: 'archives', nom: 'Archives' },
-    { id: 'reserve', nom: 'Réserve à bière' },
-    { id: 'scribes', nom: 'Maison des scribes' },
-    { id: 'porte', nom: 'Porte du temple' },
-    { id: 'jardin', nom: 'Jardin du lac' },
-    { id: 'culte', nom: 'Salle du culte' },
-    { id: 'cuisines', nom: 'Cuisines et four' },
-    { id: 'dehors', nom: 'Hors du temple' },
-    { id: 'inconnu', nom: 'Je ne sais pas' }
+    { id: 'archives', nom: 'Archives', g: 'Dans le temple' },
+    { id: 'culte', nom: 'Salle du culte', g: 'Dans le temple' },
+    { id: 'vie', nom: 'Maison de Vie', g: 'Dans le temple' },
+    { id: 'greniers', nom: 'Greniers', g: 'Dans le temple' },
+    { id: 'reserve', nom: 'Réserve à bière', g: 'Dans le temple' },
+    { id: 'scribes', nom: 'Maison des scribes', g: 'Dans le temple' },
+    { id: 'cuisines', nom: 'Cuisines et four', g: 'Dans le temple' },
+    { id: 'cour', nom: 'Cour', g: 'Dans le temple' },
+    { id: 'porte', nom: 'Porte du temple', g: 'Dans le temple' },
+    { id: 'bassin', nom: 'Bassin du lac', g: 'Jardin du lac' },
+    { id: 'purification', nom: 'Maison de purification', g: 'Jardin du lac' },
+    { id: 'chanteuses', nom: 'Salle des chanteuses', g: 'Jardin du lac' },
+    { id: 'ville', nom: 'En ville', g: 'Hors du temple' },
+    { id: 'inconnu', nom: 'Je ne sais pas', g: '' }
   ],
+  plan: planTemple(),
   scenes: [
     { id: 'archives', titre: 'Les archives', lieu: 'Salle des archives du temple de Ptah',
       description: `La salle où Ipy est mort. Rien n’a été déplacé depuis l’aube.`, svg: sceneArchives() },
@@ -349,7 +355,7 @@ const affaire = {
         { id: 'qui', q: 'Qui êtes-vous ?',
           a: `Hori, prêtre-ouab de la troisième phyle. Je purifie les offrandes et le temple. Ce mois-ci, mon tour de service est venu.` },
         { id: 'nuit', q: 'Où étiez-vous cette nuit ?',
-          a: `En prière à la chapelle, jusqu’à l’aube.` },
+          a: `En prière dans la salle du culte, jusqu’à l’aube.` },
         { id: 'soir', q: 'Et en fin d’après-midi ?',
           a: `Au lac de purification, de la 10e à la 12e heure, avec trois autres prêtres : on se baigne, on se rase, on se rince la bouche au natron avant le rite du soir. Puis le rite, jusqu’à la nuit. Demandez-leur.` },
         { id: 'brasserie', q: 'Pourquoi êtes-vous allé à la réserve ?',
@@ -407,7 +413,7 @@ const affaire = {
       ],
       confrontations: [
         { pieces: ['registre_porte'], sujet: 'nuit',
-          a: `(Un temps.) Soit. Je n’ai pas franchi la porte. J’ai dormi dans la maison des chanteuses. J’avais honte d’un simple retard, c’est tout.` },
+          a: `(Un temps.) Soit. Je n’ai pas franchi la porte. J’ai dormi dans la salle des chanteuses. J’avais honte d’un simple retard, c’est tout.` },
         { pieces: ['dedi_amants', 'traces_amants', 'hori_liaison'], grants: ['neferet_liaison'],
           a: `(Elle rougit.) Hori et moi… oui. Au bassin, de la 4e à la 6e heure, jusqu’à ce que le jardinier arrose les roses. C’est cela que je cachais. Nous étions ensemble, il vous le dira. Alors dites-moi : comment aurais-je tué un homme enfermé dans une salle scellée ?` },
         { pieces: ['tablette_brasserie'],
@@ -449,7 +455,7 @@ const affaire = {
         { id: 'qui', q: 'Qui êtes-vous ?',
           a: `Abi de Canaan, marchand de résines et d’encens. Je livre le temple depuis sept ans.` },
         { id: 'nuit', q: 'Où étiez-vous hier soir ?',
-          a: `À la maison des étrangers, en ville. J’ai quitté le temple à la 11e heure ; le gardien vous le confirmera. Ensuite, la maison de bière avec mes compagnons, jusqu’au matin.` },
+          a: `À la maison des étrangers, en ville. J’ai quitté le temple à la 11e heure ; le gardien vous le confirmera. Ensuite, la taverne, en ville, avec mes compagnons, jusqu’au matin.` },
         { id: 'affaires', q: 'Avez-vous affaire avec les scribes ?',
           a: `Aucune, Seigneur. Je vends aux prêtres, pas aux scribes.` },
         { id: 'pavot', q: 'Vous vendez des drogues ?',
@@ -596,5 +602,36 @@ Notes d’époque. Les quatre phyles de prêtres, la décade de dix jours, les d
     }
   }
 };
+
+function planTemple() {
+  const box = (x, y, w, h, nom, sub, fill) =>
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${fill}" stroke="#2b2118" stroke-width="2.5"/>` +
+    `<text x="${x + w / 2}" y="${y + h / 2 + (sub ? -2 : 6)}" text-anchor="middle" font-size="17" font-weight="700" fill="#2b2118">${nom}</text>` +
+    (sub ? `<text x="${x + w / 2}" y="${y + h / 2 + 18}" text-anchor="middle" font-size="12" font-style="italic" fill="#5a4630">${sub}</text>` : '');
+  let s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="Georgia, serif" role="img" aria-label="Plan du temple de Ptah">';
+  s += '<rect width="960" height="600" fill="#e8d9a0"/>';
+  s += '<rect x="30" y="25" width="850" height="460" rx="14" fill="#f0e2bf" stroke="#2b2118" stroke-width="5"/>';
+  s += '<rect x="215" y="165" width="645" height="305" fill="#dcc690"/>';
+  s += '<text x="570" y="235" text-anchor="middle" font-size="20" font-weight="700" fill="#7a6430" letter-spacing="3">COUR</text>';
+  s += box(50, 45, 150, 105, 'Archives', '', '#c79b62');
+  s += box(215, 45, 150, 105, 'Salle du culte', '', '#d9bf8c');
+  s += box(380, 45, 150, 105, 'Maison de Vie', 'pharmacie', '#d9bf8c');
+  s += box(545, 45, 150, 105, 'Greniers', '', '#d9bf8c');
+  s += box(710, 45, 150, 105, 'Réserve à bière', '', '#c79b62');
+  s += box(50, 165, 150, 100, 'Maison des scribes', 'école et cellules', '#d9bf8c');
+  s += box(710, 165, 150, 100, 'Cuisines et four', '', '#d9bf8c');
+  s += '<rect x="50" y="280" width="350" height="190" rx="12" fill="#b9d4a8" stroke="#2f6b4a" stroke-width="3" stroke-dasharray="9 6"/>';
+  s += '<text x="225" y="302" text-anchor="middle" font-size="14" font-weight="700" fill="#2f6b4a" letter-spacing="2">JARDIN DU LAC</text>';
+  s += '<ellipse cx="125" cy="385" rx="68" ry="55" fill="#6ea6c9" stroke="#1f4e8c" stroke-width="3"/>';
+  s += '<text x="125" y="391" text-anchor="middle" font-size="16" font-weight="700" fill="#10304f">Bassin du lac</text>';
+  s += box(225, 312, 160, 70, 'Maison de purification', '', '#e2d3a6').replace(/font-size="17"/, 'font-size="15"');
+  s += box(225, 392, 160, 66, 'Salle des chanteuses', '', '#e2d3a6').replace(/font-size="17"/, 'font-size="15"');
+  s += box(520, 395, 170, 75, 'Porte du temple', 'poste de garde', '#c79b62');
+  s += '<rect x="560" y="478" width="90" height="14" fill="#f0e2bf"/><path d="M605 510 v-30" stroke="#b5443a" stroke-width="4"/><path d="M595 492 l10 -14 l10 14 z" fill="#b5443a"/>';
+  s += '<rect x="30" y="520" width="850" height="65" rx="12" fill="#d9c79a" stroke="#2b2118" stroke-width="2.5" stroke-dasharray="3 7"/>';
+  s += '<text x="455" y="558" text-anchor="middle" font-size="18" font-weight="700" fill="#5a4630">EN VILLE · hors du temple</text>';
+  s += '<text x="455" y="577" text-anchor="middle" font-size="12" font-style="italic" fill="#5a4630">maison des étrangers, taverne, logis</text>';
+  return s + '</svg>';
+}
 
 export default affaire;

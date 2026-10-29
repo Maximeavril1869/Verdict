@@ -3,7 +3,7 @@
   'use strict';
 
   var Core = window.VCore, SEASONS = window.VERDICT_SEASONS, $app = document.getElementById('app');
-  var APP_VERSION = '1.0.1';
+  var APP_VERSION = '1.0.2';
   var LS = 'verdict:v1:';
 
   /* ───────────── utilitaires ───────────── */
@@ -189,6 +189,7 @@
       h('button', { class: 'btn', text: '‹', 'aria-label': 'Accueil', onclick: goHome }),
       h('div', { class: 'title' }, h('b', { text: CASE.titre }), h('small', { text: CASE.lieu + ' · ' + CASE.epoque })),
       enquete && !S.replay ? h('button', { class: 'btn gold', onclick: showHints, html: '💡 Indice <small>' + S.hints + '/' + CASE.aides.length + '</small>' }) : (S.replay && enquete ? h('span', { class: 'chip run', text: 'Rejeu sans indice' }) : null),
+      h('button', { class: 'btn', text: '🗺️', 'aria-label': 'Plan du temple', onclick: showPlan }),
       h('button', { class: 'btn', text: '⋯', 'aria-label': 'Menu', onclick: showMenu }));
   }
   function renderNav() {
@@ -434,7 +435,13 @@
         var tr = h('tr', null, h('td', { class: 'rowh', title: hh[1], text: hh[0] }));
         cols.forEach(function (c, ci) {
           var key = r + ':' + ci, inp = h('select', { 'aria-label': c.nom + ' ' + hh[1] }, h('option', { value: '', text: '—' }));
-          (CASE.lieux || []).forEach(function (l) { var o = h('option', { value: l.id, text: l.nom }); if (S.grid[key] === l.id) o.selected = true; inp.appendChild(o); });
+          var grp = null, grpName = null;
+          (CASE.lieux || []).forEach(function (l) {
+            var o = h('option', { value: l.id, text: l.nom }); if (S.grid[key] === l.id) o.selected = true;
+            if (l.g && l.g !== grpName) { grpName = l.g; grp = h('optgroup', { label: l.g }); inp.appendChild(grp); }
+            if (!l.g) grp = null;
+            (grp || inp).appendChild(o);
+          });
           if (S.grid[key]) inp.classList.add('set');
           inp.addEventListener('change', function () { if (inp.value) S.grid[key] = inp.value; else delete S.grid[key]; inp.classList.toggle('set', !!inp.value); saveState(); });
           tr.appendChild(h('td', null, inp));
@@ -442,6 +449,7 @@
         tbody.appendChild(tr);
       });
       tb.appendChild(tbody);
+      body.appendChild(h('button', { class: 'btn small gold', style: 'margin:0 0 8px', text: '🗺️ Voir le plan du temple', onclick: showPlan }));
       body.appendChild(h('div', { style: 'font-size:.85rem;color:var(--ink2);margin:0 2px 8px', text: 'Où était chacun, à quelle heure ? Choisis un lieu dans chaque case que tu penses connaître.' }));
       body.appendChild(tb);
     } else {
@@ -534,6 +542,13 @@
       s.append(b('Signaler une incohérence', showReport), b('Réglages', showSettings),
         b('Recommencer l’enquête', function () { confirmBox('Tout recommencer ?', 'Ta progression, tes notes et tes indices seront effacés.', 'Recommencer', function () { restart(S.replay); }, true); }),
         b('Retour à l’accueil', goHome),
+        h('div', { class: 'btns' }, h('button', { class: 'btn gold', text: 'Fermer', onclick: closeModal })));
+    });
+  }
+  function showPlan() {
+    openModal(function (s) {
+      s.classList.add('plan');
+      s.append(h('h3', { text: 'Plan du temple de Ptah' }), h('div', { class: 'planbox', html: CASE.plan }),
         h('div', { class: 'btns' }, h('button', { class: 'btn gold', text: 'Fermer', onclick: closeModal })));
     });
   }
