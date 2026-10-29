@@ -157,18 +157,29 @@ const affaire = {
       `À cette saison, l’argile du Nil durcit en deux heures environ : une argile encore molle a donc été travaillée depuis moins de deux heures. Quand on rescelle un bouchon avec le même sceau, la seconde empreinte vient souvent se poser, légèrement décalée, sur la première.` },
     { id: 'mandragore', titre: 'La mandragore', texte:
       `Son fruit se tresse dans les guirlandes de fête ; sa racine, broyée, soigne ou tue. À forte dose : pupilles dilatées, bouche brûlante et sèche, agitation, puis sommeil profond et mort. Le poison agit une à trois heures après avoir été avalé : l’empoisonneur n’est pas forcément là au moment de la mort.` },
-    { id: 'brasserie', titre: 'La brasserie du temple', texte:
-      `Chaque jarre porte la marque de son destinataire et est scellée avec l’épi d’orge, sceau de la brasserie, qui reste dans la réserve. La réserve se ferme à clé, et l’aide-brasseur garde la clé. La mesure de libation, vase gradué sacré, n’est pas rangée à la brasserie : on la prend à la salle du culte à chaque libation.` },
+    { id: 'brasserie', titre: 'La brasserie et sa réserve', texte:
+      `Chaque jarre porte la marque de son destinataire et est scellée avec l’épi d’orge, sceau de la brasserie, qui reste dans la réserve. La réserve se ferme à clé, et l’aide-brasseur garde la clé. La mesure de libation, vase gradué sacré, n’est pas rangée à la réserve : on la prend à la salle du culte à chaque libation.` },
     { id: 'dotations', titre: 'Les dotations funéraires', texte:
       `Un défunt de rang peut recevoir une dotation : des champs dont le revenu paie son culte. Ce revenu revient à la personne chargée du culte, souvent la veuve. Gonfler une dotation dans les registres, c’est voler la maison du dieu : bastonnade, exil, remboursement.` },
     { id: 'tribunal', titre: 'Devant le vizir', texte:
       `Pour accuser, il faut désigner le coupable, dire pourquoi il a agi et comment, et apporter trois preuves : celle de l’occasion (qui a pu agir, seul), celle du moyen (comment la chose a été faite), celle du mobile (pourquoi). Un accusé que l’on ne parvient pas à convaincre le tribunal de condamner est relâché.` }
   ],
 
+  lieux: [
+    { id: 'archives', nom: 'Archives' },
+    { id: 'reserve', nom: 'Réserve à bière' },
+    { id: 'scribes', nom: 'Maison des scribes' },
+    { id: 'porte', nom: 'Porte du temple' },
+    { id: 'jardin', nom: 'Jardin du lac' },
+    { id: 'culte', nom: 'Salle du culte' },
+    { id: 'cuisines', nom: 'Cuisines et four' },
+    { id: 'dehors', nom: 'Hors du temple' },
+    { id: 'inconnu', nom: 'Je ne sais pas' }
+  ],
   scenes: [
     { id: 'archives', titre: 'Les archives', lieu: 'Salle des archives du temple de Ptah',
       description: `La salle où Ipy est mort. Rien n’a été déplacé depuis l’aube.`, svg: sceneArchives() },
-    { id: 'brasserie', titre: 'La brasserie', lieu: 'Réserve à bière du temple',
+    { id: 'brasserie', titre: 'La réserve à bière', lieu: 'Réserve de la brasserie du temple',
       description: `La réserve où dorment les jarres de bière. Le petit Pa en garde la clé.`, svg: sceneBrasserie() },
     { id: 'scribes', titre: 'Maison des scribes', lieu: 'Classe et cellules des scribes',
       description: `Là où Mérou enseigne et dort, un mur de séparation entre l’école et sa cellule.`, svg: sceneScribes() },
@@ -320,7 +331,7 @@ const affaire = {
         { id: 'nuit', q: 'Racontez-moi votre nuit.',
           a: `J’ai veillé à mon poste toute la nuit, sans fermer l’œil. Aucune ombre n’a passé.` },
         { id: 'livraison', q: 'La jarre et le repas d’Ipy ?', grants: ['senou_livraison'],
-          a: `À la 1re heure de la nuit, j’ai fermé la porte du temple, puis je suis allé chercher la jarre du scribe en chef à la brasserie, et le pain au four. À la 2e heure, je les ai portés à Ipy. Il m’a dit : « Scelle-moi, je ne veux voir personne avant l’aube. » J’ai scellé du chacal, comme un bon soldat.` },
+          a: `À la 1re heure de la nuit, j’ai fermé la porte du temple, puis je suis allé chercher la jarre du scribe en chef à la réserve à bière, et le pain au four. À la 2e heure, je les ai portés à Ipy. Il m’a dit : « Scelle-moi, je ne veux voir personne avant l’aube. » J’ai scellé du chacal, comme un bon soldat.` },
         { id: 'ennemis', q: 'Ipy avait-il des ennemis ?',
           a: `Des jaloux, Seigneur. Le scribe Mérou rageait de ne pas être promu. Et Khay jurait dans la cour hier.` },
         { id: 'bouchon', q: 'Et le bouchon de la jarre ?', requires: ['bouchon'], grants: ['bouchon_durci'],
@@ -341,7 +352,7 @@ const affaire = {
           a: `En prière à la chapelle, jusqu’à l’aube.` },
         { id: 'soir', q: 'Et en fin d’après-midi ?',
           a: `Au lac de purification, de la 10e à la 12e heure, avec trois autres prêtres : on se baigne, on se rase, on se rince la bouche au natron avant le rite du soir. Puis le rite, jusqu’à la nuit. Demandez-leur.` },
-        { id: 'brasserie', q: 'Pourquoi êtes-vous allé à la brasserie ?',
+        { id: 'brasserie', q: 'Pourquoi êtes-vous allé à la réserve ?',
           a: `Pour purifier les jarres de libation, à la 9e heure : c’est mon office. Le petit Pa était là tout le temps.` },
         { id: 'mandragore', q: 'Vous avez retiré de la mandragore à la pharmacie ?', requires: ['pharmacie'],
           a: `Oui, avant-hier, pour le vieux Ankh qui a le dos brisé. Une dose de racine, comme prescrit. Interrogez Ankh, il dort à l’infirmerie.` },
@@ -387,7 +398,7 @@ const affaire = {
           a: `Néferet, chanteuse de Ptah. Veuve du scribe Ptahmose, dont je préside le culte funéraire : les offrandes, les prières, les champs de sa dotation. Cela fait six ans.` },
         { id: 'nuit', q: 'Où étiez-vous hier soir ?',
           a: `J’ai chanté l’hymne du soir au rite, puis j’ai quitté le temple avant la fermeture de la porte. Je suis rentrée chez moi, en ville, et j’ai dormi.` },
-        { id: 'libation', q: 'Vous avez pris la bière de libation à la brasserie ?',
+        { id: 'libation', q: 'Vous avez pris la bière de libation à la réserve ?',
           a: `Oui, à la 11e heure, avec le petit Pa. Il m’a servie sans tarder, j’ai pris mes deux jarres et je suis partie. Rien de plus.` },
         { id: 'ipy', q: 'Que pensiez-vous d’Ipy ?',
           a: `Un homme pâle et exact. Il comptait tout, même les soupirs. Je ne l’aimais ni ne le haïssais.` },
@@ -421,7 +432,7 @@ const affaire = {
           a: `Il voulait vérifier mes mesures de grain après le repos. Des chicanes de scribe ! Mes comptes sont justes, Seigneur.` },
         { id: 'nuit', q: 'Où étiez-vous hier soir ?',
           a: `À mon grenier, à compter les sacs, jusqu’à tard. Mes hommes vous le diront.` },
-        { id: 'brasserie', q: 'Êtes-vous retourné à la brasserie après la 10e heure ?',
+        { id: 'brasserie', q: 'Êtes-vous retourné à la réserve après la 10e heure ?',
           a: `Non. Le gamin a fermé, il avait la clé : il ne me l’aurait pas prêtée.` },
         { id: 'rations', q: 'Parlez-moi des rations de bière de vos ouvriers.', requires: ['tablette_brasserie'], grants: ['khay_fraude'],
           a: `(Il soupire.) Bon. Je réclame un peu plus de bière que mes ouvriers n’en boivent. Tout le monde le fait. Ipy allait le découvrir. Mais je ne l’ai pas tué, Seigneur : je n’aurais pas osé.` }
@@ -443,7 +454,7 @@ const affaire = {
           a: `Aucune, Seigneur. Je vends aux prêtres, pas aux scribes.` },
         { id: 'pavot', q: 'Vous vendez des drogues ?',
           a: `Du pavot aux médecins de la ville, avec les taxes. De la mandragore ? Jamais. Elle est capricieuse, elle meurt en voyage.` },
-        { id: 'brasserie', q: 'Étiez-vous à la brasserie ?',
+        { id: 'brasserie', q: 'Étiez-vous à la réserve ?',
           a: `Je suis passé avec mon encens devant la porte de la réserve, à la 10e heure. Je n’y suis pas entré. Le petit gardait sa porte.` }
       ],
       confrontations: [
@@ -475,9 +486,9 @@ const affaire = {
     methodes: [
       { id: 'coup', label: `Frappé à la tête avec un objet lourd` },
       { id: 'etranglement', label: `Étranglé avec une corde` },
-      { id: 'jarre', label: `Empoisonné : la jarre de bière a été trafiquée à la brasserie avant sa livraison` },
+      { id: 'jarre', label: `Empoisonné : la jarre de bière a été trafiquée à la réserve avant sa livraison` },
       { id: 'pain', label: `Empoisonné : le poison était dans le pain` },
-      { id: 'transport', label: `Empoisonné : la jarre, saine à la brasserie, a été trafiquée pendant le transport` },
+      { id: 'transport', label: `Empoisonné : la jarre, saine à la réserve, a été trafiquée pendant le transport` },
       { id: 'fenetre', label: `Empoisonné : le poison a été versé dans la coupe par la fenêtre` }
     ],
     emplacements: [

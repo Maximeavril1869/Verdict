@@ -21,7 +21,7 @@ export function compile(a = src) {
   const out = {
     id: a.id, version: a.version, titre: a.titre, lieu: a.lieu, epoque: a.epoque, saison: a.saison,
     intro: a.intro, portraits: a.portraits, suspects: a.suspects, temoins: a.temoins, savoirs: a.savoirs,
-    scenes: a.scenes, indices: a.indices, gens: a.gens, aides: a.aides,
+    lieux: a.lieux, scenes: a.scenes, indices: a.indices, gens: a.gens, aides: a.aides,
     accusation: {
       mobiles: a.accusation.mobiles, methodes: a.accusation.methodes, emplacements: a.accusation.emplacements,
       fins: a.accusation.fins

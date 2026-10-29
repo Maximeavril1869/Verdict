@@ -1,5 +1,5 @@
 /* Service worker Verdict : précache + stale-while-revalidate. */
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.0.1';
 const CACHE = 'verdict-' + VERSION;
 const ASSETS = ['./', 'index.html', 'css/style.css', 'js/core.js', 'js/app.js', 'saisons/index.js', 'saisons/s1/affaire1.js',
   'manifest.webmanifest', 'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];

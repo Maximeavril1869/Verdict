@@ -3,7 +3,7 @@
   'use strict';
 
   var Core = window.VCore, SEASONS = window.VERDICT_SEASONS, $app = document.getElementById('app');
-  var APP_VERSION = '1.0.0';
+  var APP_VERSION = '1.0.1';
   var LS = 'verdict:v1:';
 
   /* ───────────── utilitaires ───────────── */
@@ -433,15 +433,16 @@
         if (!hh) { tbody.appendChild(h('tr', null, h('td', { class: 'sep', colspan: cols.length + 1, text: 'COUCHER DU SOLEIL · LA NUIT COMMENCE' }))); return; }
         var tr = h('tr', null, h('td', { class: 'rowh', title: hh[1], text: hh[0] }));
         cols.forEach(function (c, ci) {
-          var key = r + ':' + ci, inp = h('input', { type: 'text', maxlength: '40', 'aria-label': c.nom + ' ' + hh[1], autocomplete: 'off', autocapitalize: 'sentences' });
-          inp.value = S.grid[key] || '';
-          inp.addEventListener('input', function () { if (inp.value) S.grid[key] = inp.value; else delete S.grid[key]; saveState(); });
+          var key = r + ':' + ci, inp = h('select', { 'aria-label': c.nom + ' ' + hh[1] }, h('option', { value: '', text: '—' }));
+          (CASE.lieux || []).forEach(function (l) { var o = h('option', { value: l.id, text: l.nom }); if (S.grid[key] === l.id) o.selected = true; inp.appendChild(o); });
+          if (S.grid[key]) inp.classList.add('set');
+          inp.addEventListener('change', function () { if (inp.value) S.grid[key] = inp.value; else delete S.grid[key]; inp.classList.toggle('set', !!inp.value); saveState(); });
           tr.appendChild(h('td', null, inp));
         });
         tbody.appendChild(tr);
       });
       tb.appendChild(tbody);
-      body.appendChild(h('div', { style: 'font-size:.85rem;color:var(--ink2);margin:0 2px 8px', text: 'Où était chacun, à quelle heure ? Remplis les cases que tu es sûr de connaître.' }));
+      body.appendChild(h('div', { style: 'font-size:.85rem;color:var(--ink2);margin:0 2px 8px', text: 'Où était chacun, à quelle heure ? Choisis un lieu dans chaque case que tu penses connaître.' }));
       body.appendChild(tb);
     } else {
       CASE.suspects.forEach(function (p) {
