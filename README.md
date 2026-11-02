@@ -29,3 +29,8 @@ En local : `python3 -m http.server` puis ouvrir `http://localhost:8000`.
 - `index.html`, `css/`, `js/` : l'application et le moteur
 - `saisons/` : catalogue et affaires compilées
 - `auteur/` : outils de l'auteur. **Ne pas ouvrir si tu veux jouer.**
+
+
+## Licence
+
+Tous droits réservés © Maximeavril1869. Code publié pour consultation uniquement ; toute réutilisation exige l'autorisation écrite de l'auteur. Voir le fichier `LICENSE`.
