@@ -50,6 +50,15 @@ titre('1. Intégrité des données');
       if (c.sujet && !topics.has(p + '.' + c.sujet)) ko(`${p} : confrontation liée au sujet inconnu « ${c.sujet} »`);
     }
   }
+  // avis (« Que pensez-vous de… ? ») : cibles et prérequis connus
+  for (const p of personnes) {
+    const av = a.gens[p].avis || {};
+    for (const [cible, v] of Object.entries(av)) {
+      if (cible !== 'ipy' && !personnes.includes(cible)) ko(`${p} : avis sur personne inconnue « ${cible} »`);
+      if (cible === p) ko(`${p} : avis sur lui-même`);
+      for (const alt of (typeof v === 'string' ? [] : v)) for (const r of alt.requires || []) if (!refOk(r)) ko(`${p} : avis sur ${cible} requiert « ${r} » inconnu`);
+    }
+  }
   for (const c of a.indices) {
     for (const r of c.requires || []) if (!refOk(r)) ko(`indice ${c.id} requiert « ${r} » inconnu`);
     if (!c.scene && !c.source) ko(`indice ${c.id} sans scène ni source`);
@@ -78,6 +87,14 @@ titre('1. Intégrité des données');
   for (const [k, m] of Object.entries(M.methodes)) if (!acc.methodes.some((x) => x.id === k)) ko('méthode du modèle absente de la liste : ' + k);
   for (const x of acc.mobiles) if (!M.mobiles[x.id]) ko('mobile sans modèle : ' + x.id);
   for (const x of acc.methodes) if (!M.methodes[x.id]) ko('méthode sans modèle : ' + x.id);
+  // Apparition progressive des hypothèses : chaque option doit se débloquer par des indices existants
+  for (const [nom, liste] of [['mobile', acc.mobiles], ['méthode', acc.methodes]]) {
+    for (const x of liste) {
+      if (!x.apparait || !x.apparait.length) { ko(nom + ' « ' + x.id + ' » sans règle d’apparition'); continue; }
+      for (const r of x.apparait) if (!indexClues[r]) ko(nom + ' « ' + x.id + ' » : indice d’apparition inconnu « ' + r + ' »');
+    }
+  }
+  ok('règles d’apparition des hypothèses vérifiées');
 }
 
 /* ───────── 2. Accessibilité : tout est-il atteignable ? ───────── */

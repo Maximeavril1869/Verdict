@@ -3,7 +3,7 @@
   'use strict';
 
   var Core = window.VCore, SEASONS = window.VERDICT_SEASONS, $app = document.getElementById('app');
-  var APP_VERSION = '1.0.2';
+  var APP_VERSION = '1.0.3';
   var LS = 'verdict:v1:';
 
   /* ───────────── utilitaires ───────────── */
@@ -332,6 +332,7 @@
     tr.forEach(function (e) {
       var ans, q;
       if (e.k === 'q') { var t = byId(g.sujets, e.id); q = h('div', { class: 'bub me', text: t.q }); ans = t.a; }
+      else if (e.k === 'a') { q = h('div', { class: 'bub me', text: 'Que pensez-vous de ' + aboutName(e.who) + ' ?' }); ans = e.t; }
       else {
         var piece = byId(CASE.indices, e.piece);
         q = h('div', { class: 'bub me piece', text: '📌 Tu présentes : ' + (piece ? piece.titre : e.piece) });
@@ -348,6 +349,7 @@
       acts.appendChild(h('button', { class: 'qbtn', text: s.q, onclick: function () { ask(p.id, s); } }));
     });
     acts.appendChild(h('button', { class: 'btn gold', style: 'margin-top:4px', text: '📌 Présenter une pièce', disabled: count(S.found) ? null : true, onclick: function () { pickPiece(p); } }));
+    if (g.avis) acts.appendChild(h('button', { class: 'btn gold', style: 'margin-top:4px', text: '🗣️ Parler de quelqu’un', onclick: function () { pickAbout(p); } }));
     pane.appendChild(acts);
     requestAnimationFrame(function () { box.scrollTop = box.scrollHeight; });
     return pane;
@@ -360,6 +362,36 @@
     saveState(); renderNav(); renderMain();
     var g = (s.grants || []).map(function (id) { return byId(CASE.indices, id); }).filter(Boolean);
     if (g.length && count(S.found) > before) toast('Nouvel indice : ' + g[0].titre);
+  }
+  /* ── « Que pensez-vous de… ? » ── */
+  function aboutName(id) { return id === 'ipy' ? 'Ipy' : (person(id) ? person(id).nom : id); }
+  function avisFor(g, who) {
+    var v = g.avis && g.avis[who]; if (!v) return null;
+    if (typeof v === 'string') return v;
+    var k = known(), best = null;
+    v.forEach(function (alt) { if (Core.reqOk(alt.requires, k)) best = alt.a; });
+    return best;
+  }
+  function pickAbout(p) {
+    var g = CASE.gens[p.id];
+    openModal(function (sh) {
+      sh.append(h('h3', { text: 'Parler de quelqu’un avec ' + p.nom }), h('div', { class: 'src', text: 'Sur qui veux-tu avoir son avis ?' }));
+      var grid = h('div', { class: 'pick' });
+      ['ipy'].concat(CASE.suspects.concat(CASE.temoins).map(function (x) { return x.id; })).forEach(function (id) {
+        if (id === p.id || !avisFor(g, id)) return;
+        var done = (S.talk[p.id] || []).some(function (e) { return e.k === 'a' && e.who === id && e.t === avisFor(g, id); });
+        grid.appendChild(h('button', { class: 'piece' + (done ? ' done' : ''), onclick: function () { closeModal(); about(p, id); } },
+          h('b', { text: aboutName(id) }), h('small', { text: id === 'ipy' ? 'La victime' : (person(id).titre) + (done ? ' · déjà demandé' : '') })));
+      });
+      sh.append(grid, h('div', { class: 'btns' }, h('button', { class: 'btn ghost', text: 'Annuler', onclick: closeModal })));
+    });
+  }
+  function about(p, who) {
+    var tr = S.talk[p.id] = S.talk[p.id] || [], t = avisFor(CASE.gens[p.id], who);
+    if (!t) return;
+    for (var i = 0; i < tr.length; i++) if (tr[i].k === 'a' && tr[i].who === who && tr[i].t === t) { toast('Tu lui as déjà posé la question.'); return; }
+    tr.push({ k: 'a', who: who, t: t });
+    saveState(); renderMain();
   }
   function pickPiece(p) {
     openModal(function (sh) {
@@ -470,6 +502,24 @@
     var A = CASE.accusation, page = h('div', { class: 'page accuse' });
     page.append(h('h2', { text: 'Porter l’accusation' }),
       h('div', { class: 'warn', html: '<b>Devant le vizir, il n’y a pas de retour en arrière.</b> Si tu accuses un innocent, sa vie est brisée. Si ton récit ne tient pas, le coupable repart libre.' }));
+    var emp = {}; A.emplacements.forEach(function (e) { emp[e.id] = e; });
+    var pieces = S.order.map(function (id) { return byId(CASE.indices, id); }).sort(function (a, b) { return a.titre.localeCompare(b.titre, 'fr'); });
+    function appears(o) { return !o.apparait || o.apparait.some(function (id) { return S.found[id]; }); }
+    // Sous chaque choix : la pièce qui l'appuie (n'apparaît qu'une fois le choix fait).
+    function proofFor(slot) {
+      var e = emp[slot]; if (!e) return null;
+      var sel = h('select', { 'aria-label': e.label }, h('option', { value: '', text: '— choisir une pièce —' }));
+      pieces.forEach(function (c) { var o = h('option', { value: c.id, text: c.titre }); if (d.preuves[slot] === c.id) o.selected = true; sel.appendChild(o); });
+      sel.addEventListener('change', function () { d.preuves[slot] = sel.value || null; saveState(); renderMain(); });
+      return h('div', { class: 'proof' }, h('label', { text: 'Preuve · ' + e.label }), sel);
+    }
+    function options(list, key, slot, none) {
+      var shown = list.filter(appears);
+      if (!shown.length) page.appendChild(h('div', { class: 'empty', text: none }));
+      shown.forEach(function (m) { page.appendChild(h('button', { class: 'opt' + (d[key] === m.id ? ' on' : ''), text: m.label, onclick: function () { d[key] = m.id; saveState(); renderMain(); } })); });
+      if (d[key] && !shown.some(function (m) { return m.id === d[key]; })) d[key] = null;
+      if (d[key]) { var pf = proofFor(slot); if (pf) page.appendChild(pf); }
+    }
     page.appendChild(h('div', { class: 'acc-sec', text: '1 · Le coupable' }));
     var sg = h('div', { class: 'sus-grid' });
     CASE.suspects.forEach(function (p) {
@@ -477,20 +527,13 @@
         h('span', { html: CASE.portraits[p.id] }), h('b', { text: p.nom }), h('small', { text: p.titre })));
     });
     page.appendChild(sg);
+    if (d.coupable) { var pc = proofFor('occasion'); if (pc) page.appendChild(pc); }
     page.appendChild(h('div', { class: 'acc-sec', text: '2 · Pourquoi : le mobile' }));
-    A.mobiles.forEach(function (m) { page.appendChild(h('button', { class: 'opt' + (d.mobile === m.id ? ' on' : ''), text: m.label, onclick: function () { d.mobile = m.id; saveState(); renderMain(); } })); });
+    page.appendChild(h('div', { class: 'sub', text: 'Les hypothèses apparaissent au fil de ce que tu découvres. Toutes ne sont pas vraies.' }));
+    options(A.mobiles, 'mobile', 'mobile', 'Aucune hypothèse de mobile pour l’instant. Cherche, interroge.');
     page.appendChild(h('div', { class: 'acc-sec', text: '3 · Comment : la méthode' }));
-    A.methodes.forEach(function (m) { page.appendChild(h('button', { class: 'opt' + (d.methode === m.id ? ' on' : ''), text: m.label, onclick: function () { d.methode = m.id; saveState(); renderMain(); } })); });
-    page.appendChild(h('div', { class: 'acc-sec', text: '4 · Les trois preuves' }));
+    options(A.methodes, 'methode', 'moyen', 'Aucune hypothèse de méthode pour l’instant. Examine d’abord le corps.');
     if (!S.order.length) page.appendChild(h('div', { class: 'empty', text: 'Tu n’as encore aucune pièce à présenter.' }));
-    A.emplacements.forEach(function (e) {
-      var sel = h('select', { 'aria-label': e.label }, h('option', { value: '', text: '— choisir une pièce —' }));
-      S.order.map(function (id) { return byId(CASE.indices, id); }).sort(function (a, b) { return a.titre.localeCompare(b.titre, 'fr'); }).forEach(function (c) {
-        var o = h('option', { value: c.id, text: c.titre }); if (d.preuves[e.id] === c.id) o.selected = true; sel.appendChild(o);
-      });
-      sel.addEventListener('change', function () { d.preuves[e.id] = sel.value || null; saveState(); renderMain(); });
-      page.appendChild(h('div', { class: 'proof' }, h('label', { text: e.label }), sel));
-    });
     var vals = d.preuves, dup = A.emplacements.some(function (e, i) { return vals[e.id] && A.emplacements.some(function (f, j) { return i !== j && vals[f.id] === vals[e.id]; }); });
     var complete = d.coupable && d.mobile && d.methode && A.emplacements.every(function (e) { return vals[e.id]; }) && !dup;
     if (dup) page.appendChild(h('div', { class: 'empty', text: 'Une même pièce ne peut pas servir deux fois.' }));

@@ -293,17 +293,39 @@ const affaire = {
   /* ── Interrogatoires ── */
   gens: {
     pentaour: {
+      avis: {
+        ipy: `Un homme précis, un peu seul. Je l’ai toujours trouvé juste.`,
+        hori: `Un prêtre sérieux. Je ne l’ai jamais vu négliger un rite.`,
+        merou: `Un esprit vif et un cœur chaud. Il en veut à ceux qui n’ont pas vu son talent.`,
+        neferet: `La plus aimée du temple. Peu de gens savent ce qu’elle porte, entre le chœur et le culte de son mari.`,
+        khay: `Un fier-à-bras, mais honnête avec moi. On ne va pas plus loin sans preuve.`,
+        abi: `Un marchand sérieux. Les rumeurs, je préfère ne pas m’y fier.`,
+        senou: `Vingt ans de service. Je ne le soupçonnerais d’un mensonge que par fatigue.`
+      },
       sujets: [
         { id: 'scelle', q: 'Racontez-moi l’ouverture de la salle.',
           a: `À l’aube, Senou a frappé ; pas de réponse. J’ai regardé le scellé du chacal : intact, l’empreinte nette, la corde non coupée. Nous l’avons brisé ensemble. Ipy gisait sur sa natte, déjà froid. Je le jure devant Maât : personne n’a ouvert cette porte pendant la nuit.` },
         { id: 'ennemis', q: 'Qui pouvait en vouloir à Ipy ?',
           a: `Khay s’est querellé avec lui hier devant les ouvriers, à propos des mesures de grain. Mérou a lancé qu’Ipy ne profiterait pas longtemps de son titre : des paroles de colère, mais on les a entendues. Quant au marchand Abi, certains murmurent qu’il vend des drogues. Moi, je ne sais rien de plus, Seigneur.` },
         { id: 'poison', q: 'Où trouve-t-on de la mandragore au temple ?', requires: ['rapport_medecin'], grants: ['pharmacie'],
-          a: `À la pharmacie de la Maison de Vie. Le registre montre une sortie il y a deux jours : le prêtre Hori en a pris pour le vieux Ankh, qui souffre du dos. Ailleurs, je ne sais pas.` }
+          a: `À la pharmacie de la Maison de Vie. Le registre montre une sortie il y a deux jours : le prêtre Hori en a pris pour le vieux Ankh, qui souffre du dos. Ailleurs, je ne sais pas.` },
+        { id: 'ipy', q: 'Quel homme était Ipy ?',
+          a: `Précis, et seul. Il restait aux archives pendant que les autres s’asseyaient dans la cour. Je l’ai rarement entendu rire.` },
+        { id: 'aube', q: 'Qui était présent à l’ouverture ?', requires: ['pentaour.scelle'],
+          a: `Senou et moi, puis le médecin Nebamon une heure plus tard. Personne d’autre n’est entré avant lui.` }
       ],
       confrontations: []
     },
     pa: {
+      avis: {
+        ipy: `Il me traitait avec politesse, chose rare. Il notait même mon nom.`,
+        hori: `Il est gentil, il me dit toujours de bien faire mon travail.`,
+        merou: `Je ne l’ai jamais vu à la réserve. Il est aux archives, c’est loin.`,
+        neferet: `Elle est belle et elle parle doucement. Elle me donne parfois un fruit sec.`,
+        khay: `Il est fort et il crie pour les rations de bière. J’ai un peu peur de lui.`,
+        abi: `Il passe devant la porte avec son encens. Il sent bon.`,
+        senou: `Le vieux gardien me donne des galettes. Il est gentil.`
+      },
       sujets: [
         { id: 'travail', q: 'Parle-moi de ton travail.',
           a: `Je garde la réserve du maître-brasseur, Seigneur. Les jarres sont scellées avec l’épi d’orge, la marque de la brasserie. La clé ne quitte jamais mon cou. Personne n’entre sans moi.` },
@@ -312,7 +334,11 @@ const affaire = {
         { id: 'seul', q: 'Quelqu’un est-il resté seul dans la réserve ?',
           a: `Jamais, Seigneur ! Je ne laisse personne seul avec les jarres. C’est la règle.` },
         { id: 'senou', q: 'Et Senou, hier soir ?', requires: ['pa.visites'], grants: ['bouchon_mou'],
-          a: `Il est venu à la 1re heure de la nuit avec son panier de pain. Je ne l’ai pas quitté des yeux : il a pris la jarre du scribe en chef et il est reparti. Il a posé le pouce sur le bouchon et il a grogné que ça collait : l’argile était encore molle. Moi, je n’y avais pas touché depuis ma vérification.` }
+          a: `Il est venu à la 1re heure de la nuit avec son panier de pain. Je ne l’ai pas quitté des yeux : il a pris la jarre du scribe en chef et il est reparti. Il a posé le pouce sur le bouchon et il a grogné que ça collait : l’argile était encore molle. Moi, je n’y avais pas touché depuis ma vérification.` },
+        { id: 'cle', q: 'Qui a la clé de la réserve ?',
+          a: `Moi seul, Seigneur. Elle pend à mon cou.` },
+        { id: 'scelles', q: 'Comment scellez-vous une jarre ?', requires: ['pa.travail'],
+          a: `Au sceau à l’épi d’orge, qui reste accroché dans la réserve. L’argile prend en deux heures. Je vérifie tout avant de fermer, à la fin de la 10e heure.` }
       ],
       confrontations: [
         { pieces: ['crochet_mesure'], sujet: 'seul', grants: ['pa_seule'],
@@ -322,17 +348,38 @@ const affaire = {
       ]
     },
     dedi: {
+      avis: {
+        ipy: `Je ne l’ai jamais connu. Je ne parle qu’à mes plantes et à la lune.`,
+        hori: `Un prêtre propre qui passe parfois près du bassin à la fraîche. Il ne dit jamais rien.`,
+        merou: `Un jeune qui chante en traversant la cour. Il ne vient pas dans mon jardin.`,
+        neferet: `Elle sent le lotus. On la reconnaît de loin.`,
+        khay: `Un gros qui n’aime pas la poussière du jardin. Je ne l’ai pas vu ici.`,
+        abi: `Un étranger qui sent la résine. Il ne vient jamais au jardin.`,
+        senou: `Un homme de la porte. Je ne le vois que de loin.`
+      },
       sujets: [
         { id: 'vu', q: 'Qu’avez-vous vu cette nuit ?', grants: ['dedi_amants'],
           a: `J’arrosais le jardin du lac. Entre la 4e et la 6e heure, deux silhouettes près du bassin : un prêtre au crâne rasé et une femme parfumée au lotus. Je les connais, Seigneur : le purificateur Hori et la chanteuse Néferet. Je n’ai rien dit. Ce ne sont pas mes affaires.` },
         { id: 'archives', q: 'Avez-vous vu quelqu’un près des archives ?',
           a: `Non, Seigneur. De mon coin, je vois la ruelle des scribes. Personne n’y est passé de toute la nuit.` },
         { id: 'parle', q: 'En avez-vous parlé à Ipy ?', requires: ['dedi.vu'],
-          a: `À Ipy ? Jamais. Je ne lui ai jamais adressé la parole de ma vie.` }
+          a: `À Ipy ? Jamais. Je ne lui ai jamais adressé la parole de ma vie.` },
+        { id: 'jardin', q: 'Que faites-vous au jardin, la nuit ?',
+          a: `J’arrose à la fraîche, quand le temple dort : les roses, les lotus, les figuiers. Je commence tard et je finis à l’aube.` },
+        { id: 'lampe', q: 'Aviez-vous de quoi voir dans l’obscurité ?', requires: ['dedi.vu'],
+          a: `Une petite lampe d’argile, et la lune. Je les ai reconnus à la voix et au parfum. Je n’ai pas écouté ce qu’ils disaient.` }
       ],
       confrontations: []
     },
     senou: {
+      avis: {
+        ipy: `Un homme qui ne souriait pas. Mais il me saluait chaque matin, ce qui n’est pas rien.`,
+        hori: `Un prêtre propre. Je l’ai vu entrer en service, rien d’autre à dire.`,
+        merou: `Un jeune qui crie dans la cour. Ça ne fait pas un tueur.`,
+        neferet: `Une voix qui fait taire la cour entière.`,
+        khay: `Un gros qui gueule, jure, rit. Il ne sait pas se taire, donc il ne sait pas cacher.`,
+        abi: `Il sort quand je lui dis, il entre quand je lui dis. Aucun reproche.`
+      },
       sujets: [
         { id: 'nuit', q: 'Racontez-moi votre nuit.',
           a: `J’ai veillé à mon poste toute la nuit, sans fermer l’œil. Aucune ombre n’a passé.` },
@@ -343,7 +390,13 @@ const affaire = {
         { id: 'bouchon', q: 'Et le bouchon de la jarre ?', requires: ['bouchon'], grants: ['bouchon_durci'],
           a: `Le bouchon ? Collant, oui. L’argile n’avait pas pris. J’ai cru que le gamin l’avait réparé. Au moment de la remettre à Ipy, elle avait durci.` },
         { id: 'neferet', q: 'Néferet est-elle sortie avant la fermeture ?', requires: ['registre_porte'],
-          a: `Non. Elle a chanté l’hymne du soir et je ne l’ai pas vue passer la porte. J’étais bien éveillé à ce moment-là, je l’aurais notée.` }
+          a: `Non. Elle a chanté l’hymne du soir et je ne l’ai pas vue passer la porte. J’étais bien éveillé à ce moment-là, je l’aurais notée.` },
+        { id: 'porte_jarre', q: 'Pourquoi avoir porté la jarre vous-même ?',
+          a: `Ordre d’Ipy : sa jarre à la tombée de la nuit, pas avant. Le petit me la remet, je la porte. C’est la règle.` },
+        { id: 'clepsydre', q: 'Comment tenez-vous les heures ?', requires: ['clepsydre'],
+          a: `Je remplis la clepsydre au coucher du soleil et je lis l’heure à voix haute à chaque heure. Je fais cela depuis vingt ans.` },
+        { id: 'scelle', q: 'Comment scelle-t-on une porte d’archives ?', requires: ['scelle'],
+          a: `Une corde nouée, une boule d’argile, mon sceau du chacal. Ipy m’a regardé faire. Personne ne défait cela sans casser l’argile.` }
       ],
       confrontations: [
         { pieces: ['poste_senou'], grants: ['senou_endormi'],
@@ -351,6 +404,14 @@ const affaire = {
       ]
     },
     hori: {
+      avis: {
+        ipy: `Exact, pâle, fermé. Il notait chaque entrée au temple. On le respectait sans l’aimer. Je n’ai rien eu contre lui.`,
+        merou: `Un esprit vif, mais il parle trop fort quand il est blessé. De là à tuer, non.`,
+        neferet: [{ a: `La voix la plus pure du chœur. Je la croise aux offices, rien de plus.` }, { requires: ['hori_liaison'], a: `Je vous l’ai avoué : nous nous voyons. Je ne peux pas croire qu’elle ait fait du mal à qui que ce soit.` }],
+        khay: `Un homme bruyant qui aime son orge. Il paie ses querelles en gros sacs de paroles.`,
+        abi: `Il livre l’encens depuis des années, toujours à l’heure. Pour le reste, je ne sais rien de lui.`,
+        senou: `Le gardien est loyal. Vingt ans de porte sans un retard.`
+      },
       sujets: [
         { id: 'qui', q: 'Qui êtes-vous ?',
           a: `Hori, prêtre-ouab de la troisième phyle. Je purifie les offrandes et le temple. Ce mois-ci, mon tour de service est venu.` },
@@ -363,7 +424,17 @@ const affaire = {
         { id: 'mandragore', q: 'Vous avez retiré de la mandragore à la pharmacie ?', requires: ['pharmacie'],
           a: `Oui, avant-hier, pour le vieux Ankh qui a le dos brisé. Une dose de racine, comme prescrit. Interrogez Ankh, il dort à l’infirmerie.` },
         { id: 'ipy', q: 'Ipy était-il au courant de votre liaison ?', requires: ['hori_liaison'],
-          a: `Non. Il ne parlait presque à personne en dehors de ses rouleaux. Je l’aurais senti.` }
+          a: `Non. Il ne parlait presque à personne en dehors de ses rouleaux. Je l’aurais senti.` },
+        { id: 'jarres', q: 'Que faites-vous exactement en purifiant les jarres ?',
+          a: `J’y verse l’eau lustrale, je récite la formule, je passe à la suivante. Les sceaux ne sont pas de mon office : c’est l’affaire de l’aide-brasseur.` },
+        { id: 'ipyrel', q: 'Quels rapports aviez-vous avec Ipy ?',
+          a: `Corrects. Il notait mes entrées, mes sorties, mes tours de service. Je ne m’en offusquais pas : c’était sa charge.` },
+        { id: 'poison', q: 'Le médecin parle d’un poison. Qu’en pensez-vous ?', requires: ['rapport_medecin'],
+          a: `Une souillure dans la maison du dieu. Je demanderai la purification complète des archives. Pour le reste, je ne suis pas médecin.` },
+        { id: 'ankh', q: 'Cette mandragore pour Ankh, vous l’avez remise vous-même ?', requires: ['hori.mandragore'],
+          a: `De ma main, à l’infirmerie, le soir même. Ankh a vu la racine, et le médecin en a noté la dose. Demandez à l’infirmerie ce qu’on en a fait ensuite.` },
+        { id: 'bassin', q: 'Où vous retrouvez-vous, Néferet et vous ?', requires: ['hori_liaison'],
+          a: `Au bassin, quand la nuit tombe. Le jardinier arrose à la fraîche et ne dit rien. Nous ne restons jamais plus de deux heures.` }
       ],
       confrontations: [
         { pieces: ['dedi_amants', 'traces_amants'], grants: ['hori_liaison'],
@@ -373,6 +444,14 @@ const affaire = {
       ]
     },
     merou: {
+      avis: {
+        ipy: `Exact jusqu’à l’absurde. Il pesait mon talent au grain et le trouvait léger. Je ne le pleure pas, mais je ne l’ai pas tué.`,
+        hori: `Un prêtre qui pèse chaque pas. Il vit selon le calendrier.`,
+        neferet: `On l’écoute chanter, on oublie tout. Elle vit confortablement du culte de son défunt mari, à ce qu’on dit.`,
+        khay: `Il triche sur les mesures, tout le monde le sait. Mais il en rit : ce n’est pas un homme qui tue.`,
+        abi: [{ a: `Un client qui paie à l’heure et ne demande rien d’autre.` }, { requires: ['merou_aveu'], a: `Vous savez déjà ce qui nous lie. Il paie, il ne pose pas de questions.` }],
+        senou: `Un vieux soldat. Il sert, il ne réfléchit pas.`
+      },
       sujets: [
         { id: 'qui', q: 'Qui êtes-vous ?',
           a: `Mérou, scribe, second d’Ipy aux archives depuis cinq ans. Du moins, je l’étais.` },
@@ -383,7 +462,15 @@ const affaire = {
         { id: 'visite', q: 'Vous êtes venu aux archives hier, n’est-ce pas ?', requires: ['visiteurs'],
           a: `Moi ? Non… Il y a longtemps. Je n’y mets plus les pieds.` },
         { id: 'autres', q: 'Que savez-vous des autres suspects ?', grants: ['neferet_veuve'],
-          a: `Khay triche sur les mesures, tout le monde le sait. Abi rôde et vend des poisons en ville, croyez-moi. Néferet ? La veuve de Ptahmose vit des revenus du culte de son mari : la voix d’un ange et la bourse bien garnie.` }
+          a: `Khay triche sur les mesures, tout le monde le sait. Abi rôde et vend des poisons en ville, croyez-moi. Néferet ? La veuve de Ptahmose vit des revenus du culte de son mari : la voix d’un ange et la bourse bien garnie.` },
+        { id: 'titre', q: 'Qui a obtenu le titre à votre place ?', requires: ['promotion'],
+          a: `Un scribe venu de Thèbes, que je n’ai jamais vu aux archives. Ipy l’a choisi sur lettre, sur un nom bien noté. Voilà tout.` },
+        { id: 'eleves', q: 'Vos élèves restent-ils tranquilles deux heures de suite ?', requires: ['ecole'],
+          a: `J’ai la voix pour cela. Huit enfants ne restent pas assis si le maître quitte sa place : ils auraient fait un vacarme à réveiller le temple.` },
+        { id: 'pere', q: 'Votre père est malade ?', requires: ['lettre_pere'],
+          a: `Les entrailles qui brûlent depuis des mois. Ma sœur m’écrit chaque décade pour des remèdes que je ne peux pas payer. Voilà pourquoi je cherche dans les rouleaux.` },
+        { id: 'abi', q: 'Vous connaissez Abi depuis longtemps ?',
+          a: `Deux ans, depuis qu’il fréquente la cour des scribes. Il paie en cuivre, il ne pose pas de questions. C’est tout ce que je sais de lui.` }
       ],
       confrontations: [
         { pieces: ['visiteurs'], sujet: 'visite', grants: ['merou_aveu'],
@@ -399,6 +486,14 @@ const affaire = {
       ]
     },
     neferet: {
+      avis: {
+        ipy: `Il tenait les registres comme on tient un serment. Je lui parlais peu.`,
+        hori: [{ a: `Un collègue du temple, juste et pur : tous le disent.` }, { requires: ['neferet_liaison'], a: `(Elle détourne les yeux.) Vous savez ce qu’il est pour moi. Il n’aurait jamais touché à un cheveu d’Ipy.` }],
+        merou: `Il a l’orgueil des gens doués et déçus. Il crie vite et se calme plus vite.`,
+        khay: `Un grand mangeur et un grand bavard. Il faut l’écouter à moitié.`,
+        abi: `Il vend de belles résines. Je n’ai pas eu affaire à lui d’une autre façon.`,
+        senou: `Il m’a toujours saluée par mon titre, même fatigué. Il est correct.`
+      },
       sujets: [
         { id: 'qui', q: 'Qui êtes-vous ?', grants: ['neferet_veuve'],
           a: `Néferet, chanteuse de Ptah. Veuve du scribe Ptahmose, dont je préside le culte funéraire : les offrandes, les prières, les champs de sa dotation. Cela fait six ans.` },
@@ -409,7 +504,15 @@ const affaire = {
         { id: 'ipy', q: 'Que pensiez-vous d’Ipy ?',
           a: `Un homme pâle et exact. Il comptait tout, même les soupirs. Je ne l’aimais ni ne le haïssais.` },
         { id: 'ipy_liaison', q: 'Ipy savait-il pour vous et Hori ?', requires: ['neferet_liaison'],
-          a: `Non. Jamais. Personne ne savait, sauf, peut-être, le jardinier.` }
+          a: `Non. Jamais. Personne ne savait, sauf, peut-être, le jardinier.` },
+        { id: 'chant', q: 'Avez-vous chanté l’hymne du soir ?',
+          a: `Comme chaque soir, avec le chœur, jusqu’à la tombée de la nuit. Les prêtres de service étaient là, ils vous le diront.` },
+        { id: 'culte', q: 'En quoi consiste le culte de Ptahmose ?', requires: ['neferet_veuve'],
+          a: `Chaque décade, je dépose des offrandes devant sa stèle et je dis son nom. Le revenu de ses champs sert à ce culte. C’est un devoir : Ptahmose m’a laissé cette charge, et je la tiens.` },
+        { id: 'archives', q: 'Connaissez-vous les archives d’Ipy ?',
+          a: `Je n’y suis jamais entrée. Les chanteuses n’ont rien à faire dans les registres.` },
+        { id: 'couronne', q: 'Vous tressez vos guirlandes vous-même ?', requires: ['couronnes'],
+          a: `Comme toutes les chanteuses : lotus, saule, quelques fruits de mandragore séchés. On les accroche dans notre salle, et n’importe qui peut y entrer.` }
       ],
       confrontations: [
         { pieces: ['registre_porte'], sujet: 'nuit',
@@ -431,6 +534,14 @@ const affaire = {
       ]
     },
     khay: {
+      avis: {
+        ipy: `Un homme qui comptait mieux que moi : ça se paie en dispute. Je ne lui voulais pas de mal.`,
+        hori: `Un prêtre qui ne parle pas, qui prie. Personne ne se plaint de lui.`,
+        merou: `Un jeune qui a la tête pleine et les poches vides. Il parle fort, il se vexe fort.`,
+        neferet: `La veuve du scribe Ptahmose. On ne lui connaît pas de souci d’argent.`,
+        abi: `Il rôde autour des greniers avec son encens, et ne dit jamais d’où il vient. Je m’en méfie.`,
+        senou: `On le dit incorruptible. Moi, je dirais surtout têtu.`
+      },
       sujets: [
         { id: 'qui', q: 'Qui êtes-vous ?',
           a: `Khay, intendant des greniers du temple. Quarante-sept ans de sacs, de mesures et de poussière d’orge.` },
@@ -441,7 +552,13 @@ const affaire = {
         { id: 'brasserie', q: 'Êtes-vous retourné à la réserve après la 10e heure ?',
           a: `Non. Le gamin a fermé, il avait la clé : il ne me l’aurait pas prêtée.` },
         { id: 'rations', q: 'Parlez-moi des rations de bière de vos ouvriers.', requires: ['tablette_brasserie'], grants: ['khay_fraude'],
-          a: `(Il soupire.) Bon. Je réclame un peu plus de bière que mes ouvriers n’en boivent. Tout le monde le fait. Ipy allait le découvrir. Mais je ne l’ai pas tué, Seigneur : je n’aurais pas osé.` }
+          a: `(Il soupire.) Bon. Je réclame un peu plus de bière que mes ouvriers n’en boivent. Tout le monde le fait. Ipy allait le découvrir. Mais je ne l’ai pas tué, Seigneur : je n’aurais pas osé.` },
+        { id: 'cour', q: 'Que faisiez-vous dans la cour, hier ?',
+          a: `Je criais, je l’avoue, devant mes ouvriers, sur le seuil des greniers. Les mots volent, mais je ne les ai pas suivis de mes mains.` },
+        { id: 'mesures', q: 'Que voulait vérifier Ipy exactement ?', requires: ['khay.dispute'],
+          a: `Mes mesures de grain après le repos de la décade, et mes rations. Il aurait compté chaque sac, chaque cruche. Voilà ce qui me chiffonnait, rien d’autre.` },
+        { id: 'ouvriers', q: 'Vos ouvriers confirment-ils votre soirée ?', requires: ['khay.nuit'],
+          a: `Six hommes, du coucher du soleil jusqu’à tard. Ensuite, j’ai dormi sur ma natte, au grenier même. Pas d’alibi plus solide que le sommeil d’un gros homme.` }
       ],
       confrontations: [
         { pieces: ['tablette_brasserie'],
@@ -451,6 +568,14 @@ const affaire = {
       ]
     },
     abi: {
+      avis: {
+        ipy: `Je l’ai à peine vu. Un scribe ne traite pas avec un marchand.`,
+        hori: `Le prêtre qui purifie. Calme. Il ne m’a jamais adressé un mot de trop.`,
+        merou: [{ a: `Un scribe pauvre qui écrit bien. Je n’ai rien à dire de plus.` }, { requires: ['abi_aveu'], a: `Un homme qui copie bien et parle peu. Nous avons un accord, vous le savez.` }],
+        neferet: `Elle chante comme une déesse, et achète peu. Je n’ai rien à en dire.`,
+        khay: `Il marchande dur. Il est de ceux qui n’aiment pas payer.`,
+        senou: `Le gardien m’a laissé sortir à la 11e heure. Il note tout, c’est son devoir.`
+      },
       sujets: [
         { id: 'qui', q: 'Qui êtes-vous ?',
           a: `Abi de Canaan, marchand de résines et d’encens. Je livre le temple depuis sept ans.` },
@@ -461,7 +586,13 @@ const affaire = {
         { id: 'pavot', q: 'Vous vendez des drogues ?',
           a: `Du pavot aux médecins de la ville, avec les taxes. De la mandragore ? Jamais. Elle est capricieuse, elle meurt en voyage.` },
         { id: 'brasserie', q: 'Étiez-vous à la réserve ?',
-          a: `Je suis passé avec mon encens devant la porte de la réserve, à la 10e heure. Je n’y suis pas entré. Le petit gardait sa porte.` }
+          a: `Je suis passé avec mon encens devant la porte de la réserve, à la 10e heure. Je n’y suis pas entré. Le petit gardait sa porte.` },
+        { id: 'encens', q: 'Que livrez-vous au temple ?',
+          a: `Résines, encens, myrrhe, un peu de natron de Canaan. Mes livraisons passent par la porte, le gardien les note. Rien ne sort de mon sac sans registre.` },
+        { id: 'ville', q: 'Que faites-vous en ville, le soir ?', requires: ['abi.nuit'],
+          a: `La taverne, des marchands de ma maison, une partie de dés. Le tavernier se souvient de moi : je perds toujours.` },
+        { id: 'mandragore', q: 'Une mandragore a tué Ipy. Qu’en dites-vous ?', requires: ['rapport_medecin'],
+          a: `Vous me regardez parce que je suis étranger ? Je vends du pavot, avec les taxes. La mandragore, elle meurt avant d’arriver à Memphis. Cherchez dans votre temple.` }
       ],
       confrontations: [
         { pieces: ['copie_hymne', 'merou_aveu'], grants: ['abi_aveu'],
@@ -482,20 +613,20 @@ const affaire = {
   /* ── Accusation ── */
   accusation: {
     mobiles: [
-      { id: 'promotion', label: `La jalousie : une promotion refusée` },
-      { id: 'grain', label: `Étouffer un détournement de grain et de bière` },
-      { id: 'liaison', label: `Protéger une liaison interdite` },
-      { id: 'dotation', label: `Protéger une rente obtenue par un faux dans les registres` },
-      { id: 'sanction', label: `Se venger d’une sanction jugée injuste` },
-      { id: 'copies', label: `Empêcher la révélation d’un trafic de textes sacrés` }
+      { id: 'promotion', label: `La jalousie : une promotion refusée`, apparait: ['promotion', 'caricature', 'registre', 'visiteurs'] },
+      { id: 'grain', label: `Étouffer un détournement de grain et de bière`, apparait: ['khay_fraude', 'tablette_brasserie', 'registre', 'visiteurs'] },
+      { id: 'liaison', label: `Protéger une liaison interdite`, apparait: ['traces_amants', 'dedi_amants', 'hori_liaison', 'neferet_liaison', 'visiteurs'] },
+      { id: 'dotation', label: `Protéger une rente obtenue par un faux dans les registres`, apparait: ['registre', 'ostracon', 'registre_lumiere', 'neferet_veuve'] },
+      { id: 'sanction', label: `Se venger d’une sanction jugée injuste`, apparait: ['ecole', 'merou_aveu', 'caricature', 'lettre_pere', 'ostracon', 'visiteurs'] },
+      { id: 'copies', label: `Empêcher la révélation d’un trafic de textes sacrés`, apparait: ['copie_hymne', 'abi_aveu', 'ostracon'] }
     ],
     methodes: [
-      { id: 'coup', label: `Frappé à la tête avec un objet lourd` },
-      { id: 'etranglement', label: `Étranglé avec une corde` },
-      { id: 'jarre', label: `Empoisonné : la jarre de bière a été trafiquée à la réserve avant sa livraison` },
-      { id: 'pain', label: `Empoisonné : le poison était dans le pain` },
-      { id: 'transport', label: `Empoisonné : la jarre, saine à la réserve, a été trafiquée pendant le transport` },
-      { id: 'fenetre', label: `Empoisonné : le poison a été versé dans la coupe par la fenêtre` }
+      { id: 'coup', label: `Frappé à la tête avec un objet lourd`, apparait: ['corps'] },
+      { id: 'etranglement', label: `Étranglé avec une corde`, apparait: ['corps'] },
+      { id: 'jarre', label: `Empoisonné : la jarre de bière a été trafiquée à la réserve avant sa livraison`, apparait: ['rapport_medecin'] },
+      { id: 'pain', label: `Empoisonné : le poison était dans le pain`, apparait: ['rapport_medecin'] },
+      { id: 'transport', label: `Empoisonné : la jarre, saine à la réserve, a été trafiquée pendant le transport`, apparait: ['rapport_medecin'] },
+      { id: 'fenetre', label: `Empoisonné : le poison a été versé dans la coupe par la fenêtre`, apparait: ['rapport_medecin'] }
     ],
     emplacements: [
       { id: 'occasion', label: `Occasion : qui a pu agir, seul ?` },
